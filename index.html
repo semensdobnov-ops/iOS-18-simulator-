@@ -13,13 +13,13 @@
 
         .device {
             width: 100%; height: 100%; max-width: 430px; max-height: 932px;
-            background: url('https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1000&auto=format&fit=crop') center/cover;
+            background: #1a0b2e; /* Простой фон вместо картинки для скорости */
             position: relative; overflow: hidden; border-radius: 45px; box-shadow: 0 0 50px rgba(0,0,0,0.9);
             transition: background 0.5s ease;
         }
 
-        /* DYNAMIC ISLAND */
-        .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 2000; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
+        /* DYNAMIC ISLAND (Упрощен) */
+        .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 2000; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
         .dynamic-island.expanded { width: 90%; height: 80px; border-radius: 30px; padding: 15px; justify-content: space-between;}
         .island-content { display: none; width: 100%; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600;}
         .dynamic-island.expanded .island-content { display: flex; }
@@ -30,22 +30,21 @@
         .dynamic-island.playing .island-content { display: none; }
 
         /* Lock Screen */
-        #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s; touch-action: none; }
+        #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.5s ease, opacity 0.5s; touch-action: none; }
         #lock-screen.unlocked { transform: translateY(-100%); opacity: 0; pointer-events: none; }
         .time-lock { text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); pointer-events: none;}
         .time-lock h1 { font-size: 96px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin-left: -5px;}
         .time-lock p { font-size: 22px; font-weight: 500; margin-top: 10px;}
         
         .widgets-lock { width: 100%; display: flex; gap: 12px; justify-content: center; margin-top: 20px; pointer-events: none;}
-        .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
+        .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
         .widget h4 { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px;}
         .widget p { font-size: 15px; font-weight: 600;}
         
-        .swipe-up { color: white; font-size: 15px; font-weight: 500; opacity: 0.8; margin-bottom: 20px; animation: pulse 2s infinite; pointer-events: none;}
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; transform: translateY(-5px); } 100% { opacity: 0.4; transform: translateY(0); } }
-
+        .swipe-up { color: white; font-size: 15px; font-weight: 500; opacity: 0.8; margin-bottom: 20px; pointer-events: none;}
+        
         /* Home Screen */
-        #home-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 70px 20px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); opacity: 0; pointer-events: none; }
+        #home-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 70px 20px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.5s ease; opacity: 0; pointer-events: none; }
         #home-screen.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; row-gap: 25px; }
         .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; position: relative;}
@@ -53,7 +52,7 @@
         .icon-box { width: 64px; height: 64px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); background: #fff; position: relative;}
         .app-icon span { color: white; font-size: 12px; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
-        /* Стили иконок */
+        /* Иконки */
         .ic-msg { background: linear-gradient(180deg, #5bf075 0%, #1cb332 100%); }
         .ic-cam { background: linear-gradient(180deg, #e5e5ea 0%, #a2a2a6 100%); }
         .ic-photos { background: linear-gradient(180deg, #ffea61 0%, #ff9500 50%, #ff2d55 100%); }
@@ -67,11 +66,11 @@
         .ic-ttt { background: #ff9500; }
         .ic-snake { background: #34c759; }
 
-        .dock { position: absolute; bottom: 25px; left: 15px; right: 15px; padding: 12px 15px; border-radius: 35px; display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .dock { position: absolute; bottom: 25px; left: 15px; right: 15px; padding: 12px 15px; border-radius: 35px; display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.1); }
         .dock .icon-box { width: 60px; height: 60px; border-radius: 15px; font-size: 30px; box-shadow: none; }
 
         /* App Screens */
-        .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; border-radius: 45px; overflow: hidden;}
+        .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; border-radius: 45px; overflow: hidden;}
         .app-screen.active { transform: translateY(0); }
         .app-header { padding: 60px 20px 15px; display: flex; align-items: center; gap: 10px; background: #1c1c1e; color: #fff; position: sticky; top: 0; z-index: 10; }
         .back-btn { font-size: 20px; color: #0a84ff; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 5px;}
@@ -79,16 +78,16 @@
         .app-content { flex: 1; overflow-y: auto; padding: 20px; background: #000; color: #fff; }
 
         /* Control Center & Notifications */
-        #control-center { position: absolute; top: -100%; right: 0; width: 100%; height: 100%; z-index: 900; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);}
+        #control-center { position: absolute; top: -100%; right: 0; width: 100%; height: 100%; z-index: 900; transition: top 0.3s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: rgba(0,0,0,0.8);}
         #control-center.active { top: 0; }
         .cc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 350px;}
         .cc-card { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 15px; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; font-weight: 600;}
-        .cc-btn { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; transition: 0.2s;}
+        .cc-btn { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer;}
         .cc-btn.active { background: #fff; color: #000; }
         .cc-slider { width: 100%; height: 150px; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column-reverse;}
-        .cc-slider-fill { width: 100%; background: #fff; transition: height 0.1s;}
+        .cc-slider-fill { width: 100%; background: #fff;}
         
-        #notifications { position: absolute; top: -100%; left: 0; width: 100%; height: 100%; z-index: 800; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 60px 20px; display: flex; flex-direction: column; gap: 15px;}
+        #notifications { position: absolute; top: -100%; left: 0; width: 100%; height: 100%; z-index: 800; background: rgba(0,0,0,0.9); transition: top 0.3s ease; padding: 60px 20px; display: flex; flex-direction: column; gap: 15px;}
         #notifications.active { top: 0; }
         .notif-card { background: #1c1c1e; border-radius: 15px; padding: 15px; color: white; display: flex; gap: 10px; align-items: center;}
         .notif-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px;}
@@ -114,7 +113,6 @@
         .weather-ui h1 { font-size: 80px; font-weight: 200; }
         .weather-ui h2 { font-size: 24px; font-weight: 500; margin-bottom: 20px;}
 
-        /* App Store & Games */
         .store-card { background: #1c1c1e; border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .store-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 30px; }
         .store-info { flex: 1; }
@@ -122,7 +120,6 @@
         .store-info p { color: #888; font-size: 12px; margin-bottom: 10px; }
         .store-btn { background: #0a84ff; color: white; border: none; padding: 6px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; }
         
-        /* Установка приложений */
         .install-progress { width: 100%; height: 6px; background: #333; border-radius: 3px; margin-top: 10px; overflow: hidden; display: none;}
         .install-progress-fill { height: 100%; background: #0a84ff; width: 0%; transition: width 0.1s;}
         
@@ -132,7 +129,6 @@
         
         .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 300px; margin: 20px auto; }
         .ttt-cell { width: 100px; height: 100px; background: #1c1c1e; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: bold; color: white; cursor: pointer; }
-        .ttt-cell:hover { background: #2c2c2e; }
         
         .snake-grid { display: grid; grid-template-columns: repeat(15, 1fr); gap: 1px; background: #333; border: 2px solid #333; width: 300px; height: 300px; margin: 20px auto; }
         .snake-cell { background: #111; width: 100%; height: 100%; }
@@ -144,12 +140,8 @@
 
     <div class="device" id="device">
         
-        <!-- Dynamic Island -->
         <div class="dynamic-island" id="dynamic-island" onclick="toggleIsland()">
-            <!-- Свернутый вид -->
             <div style="font-size: 10px; opacity: 0.5;">⬛</div>
-            
-            <!-- Развернутый вид (Плеер) -->
             <div class="island-playing">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span style="color:#0a84ff; font-size:20px;" id="island-icon">🎵</span>
@@ -180,7 +172,6 @@
 
         <div id="home-screen">
             <div class="app-grid" id="app-grid">
-                <!-- Базовые приложения -->
                 <div class="app-icon" onclick="openApp('notes')"><div class="icon-box ic-notes">📝</div><span>Заметки</span></div>
                 <div class="app-icon" onclick="openApp('calc')"><div class="icon-box ic-calc">🧮</div><span>Калькулятор</span></div>
                 <div class="app-icon" onclick="openApp('weather')"><div class="icon-box ic-weather">☀️</div><span>Погода</span></div>
@@ -209,7 +200,7 @@
                     <div class="cc-btn" onclick="this.classList.toggle('active')">🔦</div>
                 </div>
             </div>
-            <div style="position:absolute; bottom: 40px; color: white; text-align: center; opacity: 0.6;">Свайп вверх, чтобы закрыть</div>
+            <div style="position:absolute; bottom: 40px; color: white; text-align: center; opacity: 0.6;" onclick="closeControlCenter()">Свайп вверх, чтобы закрыть</div>
         </div>
 
         <div id="notifications">
@@ -238,17 +229,20 @@
     </div>
 
     <script>
-        // --- ЧАСЫ ---
+        // Ждем загрузки DOM
+        window.addEventListener('load', () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+
         function updateTime() {
             const now = new Date();
             const hours = now.getHours().toString().padStart(2, '0');
             const mins = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('time-display').innerText = `${hours}:${mins}`;
+            const display = document.getElementById('time-display');
+            if(display) display.innerText = `${hours}:${mins}`;
         }
-        setInterval(updateTime, 1000);
-        updateTime();
 
-        // --- РАЗБЛОКИРОВКА ---
         let startY = 0;
         const lockScreen = document.getElementById('lock-screen');
         const homeScreen = document.getElementById('home-screen');
@@ -271,19 +265,13 @@
             setTimeout(() => { homeScreen.classList.add('active'); }, 200);
         }
 
-        // --- DYNAMIC ISLAND ЛОГИКА ---
+        // ISLAND
         const island = document.getElementById('dynamic-island');
-        let isIslandExpanded = false;
-        
         function toggleIsland() {
-            if(audio.src) {
-                island.classList.toggle('playing');
-            } else {
-                island.classList.toggle('expanded');
-            }
+            if(audio.src) { island.classList.toggle('playing'); } 
+            else { island.classList.toggle('expanded'); }
         }
         
-        // Временная имитация плеера (для острова)
         let isPlaying = false;
         let audio = new Audio();
         let currentTrack = 0;
@@ -294,15 +282,17 @@
         ];
 
         function startMusic() {
-            audio.src = tracks[currentTrack].url;
-            audio.play();
-            isPlaying = true;
-            island.classList.add('playing');
-            document.getElementById('island-title').innerText = tracks[currentTrack].name;
-            document.getElementById('island-play-btn').innerText = '⏸';
-            document.getElementById('island-subtext').innerText = "Играет сейчас";
-            document.getElementById('island-icon').innerText = "🎵";
-            audio.onended = nextTrack;
+            try {
+                audio.src = tracks[currentTrack].url;
+                audio.play();
+                isPlaying = true;
+                island.classList.add('playing');
+                document.getElementById('island-title').innerText = tracks[currentTrack].name;
+                document.getElementById('island-play-btn').innerText = '⏸';
+                document.getElementById('island-subtext').innerText = "Играет сейчас";
+                document.getElementById('island-icon').innerText = "🎵";
+                audio.onended = nextTrack;
+            } catch(e) { console.log("Audio Error"); }
         }
 
         function togglePlay() {
@@ -310,21 +300,14 @@
             else { audio.pause(); isPlaying = false; document.getElementById('island-play-btn').innerText = '▶️'; }
         }
 
-        function nextTrack() {
-            currentTrack = (currentTrack + 1) % tracks.length;
-            startMusic();
-        }
+        function nextTrack() { currentTrack = (currentTrack + 1) % tracks.length; startMusic(); }
+        function prevTrack() { currentTrack = (currentTrack - 1 + tracks.length) % tracks.length; startMusic(); }
 
-        function prevTrack() {
-            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-            startMusic();
-        }
-
-        // --- УСТАНОВКА ПРИЛОЖЕНИЙ ---
+        // INSTALL
         function installApp(appName, iconClass, appFunc) {
             const progressBar = document.getElementById('progress-' + appName);
             const btn = document.getElementById('btn-' + appName);
-            
+            if(!progressBar || !btn) return;
             if(progressBar.style.display === 'block') return;
             
             progressBar.style.display = 'block';
@@ -332,10 +315,9 @@
             btn.disabled = true;
             let progress = 0;
             
-            // Показываем прогресс в Dynamic Island
             island.classList.add('playing');
             document.getElementById('island-subtext').innerText = "Загрузка...";
-            document.getElementById('island-title').innerText = "Установка " + appName;
+            document.getElementById('island-title').innerText = appFunc.name;
             document.getElementById('island-icon').innerText = "⬇️";
             
             const interval = setInterval(() => {
@@ -346,10 +328,9 @@
                 if(progress === 100) {
                     clearInterval(interval);
                     setTimeout(() => {
-                        // Убираем из AppStore
-                        document.getElementById('store-card-' + appName).style.display = 'none';
+                        let card = document.getElementById('store-card-' + appName);
+                        if(card) card.style.display = 'none';
                         
-                        // Добавляем на рабочий стол
                         const homeGrid = document.getElementById('app-grid');
                         const newApp = document.createElement('div');
                         newApp.className = 'app-icon';
@@ -357,24 +338,18 @@
                         newApp.onclick = () => openApp(appFunc.id);
                         homeGrid.appendChild(newApp);
                         
-                        // Уведомление в острове
                         document.getElementById('island-subtext').innerText = "Установлено!";
                         document.getElementById('island-title').innerText = appFunc.name;
                         document.getElementById('island-icon').innerText = "✅";
-                        
-                        setTimeout(() => {
-                            island.classList.remove('playing');
-                        }, 2000);
-                        
+                        setTimeout(() => { island.classList.remove('playing'); }, 2000);
                     }, 500);
                 }
             }, 200);
         }
 
-        // --- ПРИЛОЖЕНИЯ ---
+        // APPS
         let calcValue = '';
         let notes = JSON.parse(localStorage.getItem('ios_notes') || '[]');
-        let installedGames = JSON.parse(localStorage.getItem('installed_games') || '[]');
 
         function openApp(app) {
             const screen = document.getElementById('app-screen');
@@ -421,7 +396,7 @@
                 title.innerText = "Погода";
                 content.style.padding = '0';
                 content.innerHTML = `
-                    <div class="weather-ui" style="background: linear-gradient(180deg, #00c6ff, #0072ff); height: 100%;">
+                    <div class="weather-ui" style="background: #0072ff; height: 100%;">
                         <h2>Москва</h2>
                         <h1>+21°</h1>
                         <p>Облачно</p>
@@ -457,11 +432,6 @@
                         </div>
                     </div>
                 `;
-                
-                // Прячем уже установленные игры
-                if(installedGames.includes('Flappy')) document.getElementById('store-card-Flappy').style.display = 'none';
-                if(installedGames.includes('TTT')) document.getElementById('store-card-TTT').style.display = 'none';
-                if(installedGames.includes('Snake')) document.getElementById('store-card-Snake').style.display = 'none';
             }
             else if (app === 'clock') {
                 title.innerText = "Часы";
@@ -474,11 +444,9 @@
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Wi-Fi</span> <span style="color:#0a84ff;">Домашняя сеть ></span></div>
                         <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Bluetooth</span> <span style="color:#0a84ff;">Вкл ></span></div>
-                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Основные</span> <span style="color:#888;">></span></div>
                     </div>
                 `;
             }
-            // Установленные игры
             else if (app === 'flappy') { playFlappy(); }
             else if (app === 'ttt') { playTTT(); }
             else if (app === 'snake') { playSnake(); }
@@ -493,9 +461,10 @@
             if(gameInterval) clearInterval(gameInterval);
         }
 
-        // --- ЛОГИКА КАЛЬКУЛЯТОРА ---
+        // CALC
         function calcInput(val) {
             const display = document.getElementById('calc-display');
+            if(!display) return;
             if (val === '=') {
                 try {
                     let result = eval(calcValue);
@@ -514,7 +483,7 @@
         }
         function calcClear() { calcValue = ''; document.getElementById('calc-display').innerText = '0'; }
 
-        // --- ЛОГИКА ЗАМЕТОК ---
+        // NOTES
         function renderNotes(container) {
             container.innerHTML = `
                 <input type="text" class="note-input" id="new-note-text" placeholder="Текст заметки...">
@@ -537,10 +506,8 @@
             }
         }
 
-        // --- ИГРЫ ---
+        // GAMES
         let gameInterval;
-        
-        // Flappy Bird
         function playFlappy() {
             const title = document.getElementById('app-title');
             const content = document.getElementById('app-content');
@@ -593,7 +560,6 @@
             }, 1000/60);
         }
 
-        // Крестики-нолики
         let tttBoard = [], tttPlayer = 'X', tttActive = false;
         function playTTT() {
             const title = document.getElementById('app-title');
@@ -637,15 +603,12 @@
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
             for(let w of wins) {
                 if(tttBoard[w[0]] && tttBoard[w[0]] === tttBoard[w[1]] && tttBoard[w[0]] === tttBoard[w[2]]) {
-                    alert(`Победил ${tttBoard[w[0]]}!`);
-                    tttActive = false;
-                    return;
+                    alert(`Победил ${tttBoard[w[0]]}!`); tttActive = false; return;
                 }
             }
             if(!tttBoard.includes('')) { alert("Ничья!"); tttActive = false; }
         }
 
-        // Змейка
         let snake, snakeDir, food, snakeTimer;
         function playSnake() {
             const title = document.getElementById('app-title');
@@ -681,16 +644,13 @@
                 const head = {x: snake[0].x + snakeDir.x, y: snake[0].y + snakeDir.y};
                 if(head.x < 0 || head.x >= 15 || head.y < 0 || head.y >= 15 || snake.some(s => s.x === head.x && s.y === head.y)) {
                     clearInterval(snakeTimer);
-                    alert("Игра окончена! Счёт: " + score);
-                    return;
+                    alert("Игра окончена! Счёт: " + score); return;
                 }
                 snake.unshift(head);
                 if(head.x === food.x && head.y === food.y) {
                     score++; document.getElementById('snake-score').innerText = score;
                     food = {x: Math.floor(Math.random()*15), y: Math.floor(Math.random()*15)};
-                } else {
-                    snake.pop();
-                }
+                } else { snake.pop(); }
                 renderSnake();
             }, 200);
         }
@@ -714,6 +674,13 @@
             if(snakeDir.x === -x && snakeDir.y === -y) return;
             snakeDir = {x, y};
         }
+
+        // CONTROL CENTER & NOTIF
+        function openControlCenter() { document.getElementById('control-center').classList.add('active'); }
+        function closeControlCenter() { document.getElementById('control-center').classList.remove('active'); }
+        function openNotif() { document.getElementById('notifications').classList.add('active'); }
+        function closeNotif() { document.getElementById('notifications').classList.remove('active'); }
+        
     </script>
 </body>
 </html>
