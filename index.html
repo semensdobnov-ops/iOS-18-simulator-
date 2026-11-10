@@ -18,22 +18,29 @@
             transition: background 0.5s ease;
         }
 
-        /* Dynamic Island */
-        .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 1000; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
+        /* DYNAMIC ISLAND */
+        .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 2000; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
         .dynamic-island.expanded { width: 90%; height: 80px; border-radius: 30px; padding: 15px; justify-content: space-between;}
         .island-content { display: none; width: 100%; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600;}
         .dynamic-island.expanded .island-content { display: flex; }
+        
+        .island-playing { display: none; width: 100%; justify-content: space-between; align-items: center;}
+        .dynamic-island.playing { width: 90%; height: 60px; border-radius: 30px; padding: 10px 15px; justify-content: space-between;}
+        .dynamic-island.playing .island-playing { display: flex; }
+        .dynamic-island.playing .island-content { display: none; }
 
         /* Lock Screen */
         #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s; touch-action: none; }
-        #lock-screen.unlocked { transform: translateY(-100%); opacity: 0; }
+        #lock-screen.unlocked { transform: translateY(-100%); opacity: 0; pointer-events: none; }
         .time-lock { text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); pointer-events: none;}
         .time-lock h1 { font-size: 96px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin-left: -5px;}
         .time-lock p { font-size: 22px; font-weight: 500; margin-top: 10px;}
+        
         .widgets-lock { width: 100%; display: flex; gap: 12px; justify-content: center; margin-top: 20px; pointer-events: none;}
         .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
         .widget h4 { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px;}
         .widget p { font-size: 15px; font-weight: 600;}
+        
         .swipe-up { color: white; font-size: 15px; font-weight: 500; opacity: 0.8; margin-bottom: 20px; animation: pulse 2s infinite; pointer-events: none;}
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; transform: translateY(-5px); } 100% { opacity: 0.4; transform: translateY(0); } }
 
@@ -41,11 +48,12 @@
         #home-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 70px 20px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); opacity: 0; pointer-events: none; }
         #home-screen.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; row-gap: 25px; }
-        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
+        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; position: relative;}
         .app-icon:active { transform: scale(0.85); opacity: 0.8; }
-        .icon-box { width: 64px; height: 64px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); background: #fff; }
+        .icon-box { width: 64px; height: 64px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); background: #fff; position: relative;}
         .app-icon span { color: white; font-size: 12px; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
         
+        /* Стили иконок */
         .ic-msg { background: linear-gradient(180deg, #5bf075 0%, #1cb332 100%); }
         .ic-cam { background: linear-gradient(180deg, #e5e5ea 0%, #a2a2a6 100%); }
         .ic-photos { background: linear-gradient(180deg, #ffea61 0%, #ff9500 50%, #ff2d55 100%); }
@@ -54,11 +62,15 @@
         .ic-weather { background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); }
         .ic-notes { background: linear-gradient(180deg, #f5f5dc 0%, #d4af37 100%); color: #333;}
         .ic-clock { background: linear-gradient(180deg, #fff 0%, #000 100%); }
+        .ic-store { background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); }
+        .ic-flappy { background: #70c5ce; }
+        .ic-ttt { background: #ff9500; }
+        .ic-snake { background: #34c759; }
 
         .dock { position: absolute; bottom: 25px; left: 15px; right: 15px; padding: 12px 15px; border-radius: 35px; display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .dock .icon-box { width: 60px; height: 60px; border-radius: 15px; font-size: 30px; box-shadow: none; }
 
-        /* Apps Screens (Universal) */
+        /* App Screens */
         .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; border-radius: 45px; overflow: hidden;}
         .app-screen.active { transform: translateY(0); }
         .app-header { padding: 60px 20px 15px; display: flex; align-items: center; gap: 10px; background: #1c1c1e; color: #fff; position: sticky; top: 0; z-index: 10; }
@@ -66,7 +78,7 @@
         .app-header h2 { font-size: 18px; font-weight: 600; margin-left: auto; margin-right: auto; transform: translateX(-20px);}
         .app-content { flex: 1; overflow-y: auto; padding: 20px; background: #000; color: #fff; }
 
-        /* Control Center */
+        /* Control Center & Notifications */
         #control-center { position: absolute; top: -100%; right: 0; width: 100%; height: 100%; z-index: 900; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);}
         #control-center.active { top: 0; }
         .cc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 350px;}
@@ -76,7 +88,6 @@
         .cc-slider { width: 100%; height: 150px; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column-reverse;}
         .cc-slider-fill { width: 100%; background: #fff; transition: height 0.1s;}
         
-        /* Notifications */
         #notifications { position: absolute; top: -100%; left: 0; width: 100%; height: 100%; z-index: 800; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 60px 20px; display: flex; flex-direction: column; gap: 15px;}
         #notifications.active { top: 0; }
         .notif-card { background: #1c1c1e; border-radius: 15px; padding: 15px; color: white; display: flex; gap: 10px; align-items: center;}
@@ -103,29 +114,58 @@
         .weather-ui h1 { font-size: 80px; font-weight: 200; }
         .weather-ui h2 { font-size: 24px; font-weight: 500; margin-bottom: 20px;}
 
+        /* App Store & Games */
+        .store-card { background: #1c1c1e; border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .store-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 30px; }
+        .store-info { flex: 1; }
+        .store-info h3 { color: #fff; font-size: 16px; margin-bottom: 5px; }
+        .store-info p { color: #888; font-size: 12px; margin-bottom: 10px; }
+        .store-btn { background: #0a84ff; color: white; border: none; padding: 6px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        
+        /* Установка приложений */
+        .install-progress { width: 100%; height: 6px; background: #333; border-radius: 3px; margin-top: 10px; overflow: hidden; display: none;}
+        .install-progress-fill { height: 100%; background: #0a84ff; width: 0%; transition: width 0.1s;}
+        
+        #game-canvas { display: block; margin: 0 auto; background: #70c5ce; border: 2px solid #fff; border-radius: 8px; }
+        .game-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 200; border-radius: 45px;}
+        .game-overlay.active { display: flex; }
+        
+        .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 300px; margin: 20px auto; }
+        .ttt-cell { width: 100px; height: 100px; background: #1c1c1e; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: bold; color: white; cursor: pointer; }
+        .ttt-cell:hover { background: #2c2c2e; }
+        
+        .snake-grid { display: grid; grid-template-columns: repeat(15, 1fr); gap: 1px; background: #333; border: 2px solid #333; width: 300px; height: 300px; margin: 20px auto; }
+        .snake-cell { background: #111; width: 100%; height: 100%; }
+        .snake-cell.snake { background: #34c759; }
+        .snake-cell.food { background: #ff2d55; border-radius: 50%; }
     </style>
 </head>
 <body>
 
     <div class="device" id="device">
         
+        <!-- Dynamic Island -->
         <div class="dynamic-island" id="dynamic-island" onclick="toggleIsland()">
+            <!-- Свернутый вид -->
             <div style="font-size: 10px; opacity: 0.5;">⬛</div>
-            <div class="island-content">
+            
+            <!-- Развернутый вид (Плеер) -->
+            <div class="island-playing">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <span style="color:#0a84ff; font-size:20px;">🎵</span>
+                    <span style="color:#0a84ff; font-size:20px;" id="island-icon">🎵</span>
                     <div>
-                        <div style="font-size:12px; color:#888; margin-bottom:2px;">Nexi</div>
-                        <div>aeth is goat</div>
+                        <div style="font-size:10px; color:#888; margin-bottom:2px;" id="island-subtext">Играет сейчас</div>
+                        <div style="font-size:13px;" id="island-title">Nexi - aeth is goat</div>
                     </div>
                 </div>
-                <div style="display:flex; gap:15px; font-size:20px;">
-                    <span>⏮</span><span>⏸</span><span>⏭</span>
+                <div style="display:flex; gap:15px; font-size:18px;">
+                    <span onclick="event.stopPropagation(); prevTrack()">⏮</span>
+                    <span onclick="event.stopPropagation(); togglePlay()" id="island-play-btn">⏸</span>
+                    <span onclick="event.stopPropagation(); nextTrack()">⏭</span>
                 </div>
             </div>
         </div>
 
-        <!-- Lock Screen -->
         <div id="lock-screen">
             <div class="time-lock">
                 <h1 id="time-display">09:41</h1>
@@ -138,15 +178,15 @@
             <div class="swipe-up">Свайп вверх ⬆️</div>
         </div>
 
-        <!-- Home Screen -->
         <div id="home-screen">
-            <div class="app-grid">
+            <div class="app-grid" id="app-grid">
+                <!-- Базовые приложения -->
                 <div class="app-icon" onclick="openApp('notes')"><div class="icon-box ic-notes">📝</div><span>Заметки</span></div>
                 <div class="app-icon" onclick="openApp('calc')"><div class="icon-box ic-calc">🧮</div><span>Калькулятор</span></div>
                 <div class="app-icon" onclick="openApp('weather')"><div class="icon-box ic-weather">☀️</div><span>Погода</span></div>
-                <div class="app-icon" onclick="openApp('settings')"><div class="icon-box ic-settings">⚙️</div><span>Настройки</span></div>
+                <div class="app-icon" onclick="openApp('store')"><div class="icon-box ic-store">🅰️</div><span>App Store</span></div>
                 <div class="app-icon" onclick="openApp('clock')"><div class="icon-box ic-clock">🕒</div><span>Часы</span></div>
-                <div class="app-icon" onclick="openApp('photos')"><div class="icon-box ic-photos">🌸</div><span>Фото</span></div>
+                <div class="app-icon" onclick="openApp('settings')"><div class="icon-box ic-settings">⚙️</div><span>Настройки</span></div>
             </div>
             <div class="dock">
                 <div class="icon-box" style="background:#34c759" onclick="openNotif()">📞</div>
@@ -156,7 +196,6 @@
             </div>
         </div>
 
-        <!-- Control Center -->
         <div id="control-center">
             <div class="cc-grid">
                 <div class="cc-slider"><div class="cc-slider-fill" style="height: 60%;"></div></div>
@@ -173,7 +212,6 @@
             <div style="position:absolute; bottom: 40px; color: white; text-align: center; opacity: 0.6;">Свайп вверх, чтобы закрыть</div>
         </div>
 
-        <!-- Notifications -->
         <div id="notifications">
             <div style="display:flex; justify-content:space-between; color:white; margin-bottom:20px;">
                 <h2 style="font-size: 24px; font-weight: 700;">Уведомления</h2>
@@ -189,7 +227,6 @@
             </div>
         </div>
 
-        <!-- App Screens -->
         <div id="app-screen" class="app-screen">
             <div class="app-header">
                 <div class="back-btn" onclick="closeApp()">‹ Назад</div>
@@ -199,7 +236,8 @@
         </div>
 
     </div>
-<script>
+
+    <script>
         // --- ЧАСЫ ---
         function updateTime() {
             const now = new Date();
@@ -221,7 +259,6 @@
             if (startY - endY > 50) unlock();
         }, {passive: true});
         
-        // Для ПК
         let mouseDown = false;
         lockScreen.addEventListener('mousedown', (e) => { startY = e.clientY; mouseDown = true; });
         lockScreen.addEventListener('mouseup', (e) => {
@@ -234,63 +271,119 @@
             setTimeout(() => { homeScreen.classList.add('active'); }, 200);
         }
 
-        // --- DYNAMIC ISLAND ---
+        // --- DYNAMIC ISLAND ЛОГИКА ---
+        const island = document.getElementById('dynamic-island');
+        let isIslandExpanded = false;
+        
         function toggleIsland() {
-            document.getElementById('dynamic-island').classList.toggle('expanded');
+            if(audio.src) {
+                island.classList.toggle('playing');
+            } else {
+                island.classList.toggle('expanded');
+            }
+        }
+        
+        // Временная имитация плеера (для острова)
+        let isPlaying = false;
+        let audio = new Audio();
+        let currentTrack = 0;
+        const tracks = [
+            { name: "Nexi - aeth is goat", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { name: "Киберпанк", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { name: "Рассвет", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+        ];
+
+        function startMusic() {
+            audio.src = tracks[currentTrack].url;
+            audio.play();
+            isPlaying = true;
+            island.classList.add('playing');
+            document.getElementById('island-title').innerText = tracks[currentTrack].name;
+            document.getElementById('island-play-btn').innerText = '⏸';
+            document.getElementById('island-subtext').innerText = "Играет сейчас";
+            document.getElementById('island-icon').innerText = "🎵";
+            audio.onended = nextTrack;
         }
 
-        // --- CONTROL CENTER & NOTIFICATIONS ---
-        // Свайп от верхнего правого угла
-        let swipeStartX = 0, swipeStartY = 0;
-        document.addEventListener('touchstart', (e) => {
-            swipeStartX = e.touches[0].clientX;
-            swipeStartY = e.touches[0].clientY;
-        }, {passive: true});
+        function togglePlay() {
+            if(audio.paused) { audio.play(); isPlaying = true; document.getElementById('island-play-btn').innerText = '⏸'; }
+            else { audio.pause(); isPlaying = false; document.getElementById('island-play-btn').innerText = '▶️'; }
+        }
 
-        document.addEventListener('touchend', (e) => {
-            let endX = e.changedTouches[0].clientX;
-            let endY = e.changedTouches[0].clientY;
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % tracks.length;
+            startMusic();
+        }
+
+        function prevTrack() {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+            startMusic();
+        }
+
+        // --- УСТАНОВКА ПРИЛОЖЕНИЙ ---
+        function installApp(appName, iconClass, appFunc) {
+            const progressBar = document.getElementById('progress-' + appName);
+            const btn = document.getElementById('btn-' + appName);
             
-            // Свайп вниз от верхнего края (уведомления)
-            if (swipeStartY < 50 && endY - swipeStartY > 100 && swipeStartX < 150) {
-                if(homeScreen.classList.contains('active')) openNotif();
-            }
-            // Свайп вниз от правого верхнего угла (Control Center)
-            if (swipeStartY < 50 && endY - swipeStartY > 100 && swipeStartX > window.innerWidth - 150) {
-                if(homeScreen.classList.contains('active')) openControlCenter();
-            }
-        }, {passive: true});
-
-        // Свайп вверх для закрытия панелей
-        document.getElementById('control-center').addEventListener('touchstart', (e) => { swipeStartY = e.touches[0].clientY; }, {passive: true});
-        document.getElementById('control-center').addEventListener('touchend', (e) => {
-            let endY = e.changedTouches[0].clientY;
-            if (swipeStartY - endY > 50) closeControlCenter();
-        }, {passive: true});
-        document.getElementById('notifications').addEventListener('touchstart', (e) => { swipeStartY = e.touches[0].clientY; }, {passive: true});
-        document.getElementById('notifications').addEventListener('touchend', (e) => {
-            let endY = e.changedTouches[0].clientY;
-            if (swipeStartY - endY > 50) closeNotif();
-        }, {passive: true});
-
-        function openControlCenter() { document.getElementById('control-center').classList.add('active'); }
-        function closeControlCenter() { document.getElementById('control-center').classList.remove('active'); }
-        function openNotif() { document.getElementById('notifications').classList.add('active'); }
-        function closeNotif() { document.getElementById('notifications').classList.remove('active'); }
+            if(progressBar.style.display === 'block') return;
+            
+            progressBar.style.display = 'block';
+            btn.innerText = "Загрузка...";
+            btn.disabled = true;
+            let progress = 0;
+            
+            // Показываем прогресс в Dynamic Island
+            island.classList.add('playing');
+            document.getElementById('island-subtext').innerText = "Загрузка...";
+            document.getElementById('island-title').innerText = "Установка " + appName;
+            document.getElementById('island-icon').innerText = "⬇️";
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 20;
+                if(progress > 100) progress = 100;
+                progressBar.querySelector('.install-progress-fill').style.width = progress + '%';
+                
+                if(progress === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        // Убираем из AppStore
+                        document.getElementById('store-card-' + appName).style.display = 'none';
+                        
+                        // Добавляем на рабочий стол
+                        const homeGrid = document.getElementById('app-grid');
+                        const newApp = document.createElement('div');
+                        newApp.className = 'app-icon';
+                        newApp.innerHTML = `<div class="icon-box ${iconClass}">${appFunc.icon}</div><span>${appFunc.name}</span>`;
+                        newApp.onclick = () => openApp(appFunc.id);
+                        homeGrid.appendChild(newApp);
+                        
+                        // Уведомление в острове
+                        document.getElementById('island-subtext').innerText = "Установлено!";
+                        document.getElementById('island-title').innerText = appFunc.name;
+                        document.getElementById('island-icon').innerText = "✅";
+                        
+                        setTimeout(() => {
+                            island.classList.remove('playing');
+                        }, 2000);
+                        
+                    }, 500);
+                }
+            }, 200);
+        }
 
         // --- ПРИЛОЖЕНИЯ ---
-        let currentApp = '';
         let calcValue = '';
         let notes = JSON.parse(localStorage.getItem('ios_notes') || '[]');
+        let installedGames = JSON.parse(localStorage.getItem('installed_games') || '[]');
 
         function openApp(app) {
-            currentApp = app;
             const screen = document.getElementById('app-screen');
             const title = document.getElementById('app-title');
             const content = document.getElementById('app-content');
             
             screen.classList.add('active');
             content.innerHTML = '';
+            content.style.padding = '20px';
 
             if (app === 'calc') {
                 title.innerText = "Калькулятор";
@@ -322,7 +415,6 @@
             } 
             else if (app === 'notes') {
                 title.innerText = "Заметки";
-                content.style.padding = '20px';
                 renderNotes(content);
             }
             else if (app === 'weather') {
@@ -337,46 +429,68 @@
                     </div>
                 `;
             }
-            else if (app === 'clock') {
-                title.innerText = "Часы";
-                content.style.padding = '20px';
+            else if (app === 'store') {
+                title.innerText = "App Store";
                 content.innerHTML = `
-                    <div style="text-align: center; margin-top: 50px;">
-                        <div style="font-size: 80px; font-weight: 200; color: #fff;" id="clock-app-time">00:00</div>
-                        <div style="color: #888; margin-top: 10px;">Сейчас</div>
+                    <div class="store-card" id="store-card-Flappy">
+                        <div class="store-icon ic-flappy">🐦</div>
+                        <div class="store-info">
+                            <h3>Flappy Bird</h3><p>Аркада</p>
+                            <div class="install-progress" id="progress-Flappy"><div class="install-progress-fill"></div></div>
+                            <button class="store-btn" id="btn-Flappy" onclick="installApp('Flappy', 'ic-flappy', {name:'Flappy', id:'flappy', icon:'🐦'})">Установить</button>
+                        </div>
+                    </div>
+                    <div class="store-card" id="store-card-TTT">
+                        <div class="store-icon ic-ttt">❌</div>
+                        <div class="store-info">
+                            <h3>Крестики-нолики</h3><p>Логика</p>
+                            <div class="install-progress" id="progress-TTT"><div class="install-progress-fill"></div></div>
+                            <button class="store-btn" id="btn-TTT" onclick="installApp('TTT', 'ic-ttt', {name:'Крестики', id:'ttt', icon:'❌'})">Установить</button>
+                        </div>
+                    </div>
+                    <div class="store-card" id="store-card-Snake">
+                        <div class="store-icon ic-snake">🐍</div>
+                        <div class="store-info">
+                            <h3>Змейка</h3><p>Аркада</p>
+                            <div class="install-progress" id="progress-Snake"><div class="install-progress-fill"></div></div>
+                            <button class="store-btn" id="btn-Snake" onclick="installApp('Snake', 'ic-snake', {name:'Змейка', id:'snake', icon:'🐍'})">Установить</button>
+                        </div>
                     </div>
                 `;
-                setInterval(() => {
-                    const now = new Date();
-                    document.getElementById('clock-app-time').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-                }, 1000);
+                
+                // Прячем уже установленные игры
+                if(installedGames.includes('Flappy')) document.getElementById('store-card-Flappy').style.display = 'none';
+                if(installedGames.includes('TTT')) document.getElementById('store-card-TTT').style.display = 'none';
+                if(installedGames.includes('Snake')) document.getElementById('store-card-Snake').style.display = 'none';
+            }
+            else if (app === 'clock') {
+                title.innerText = "Часы";
+                content.innerHTML = `<div style="text-align: center; margin-top: 50px;"><div style="font-size: 80px; font-weight: 200; color: #fff;" id="clock-app-time">00:00</div><div style="color: #888; margin-top: 10px;">Сейчас</div></div>`;
+                setInterval(() => { const now = new Date(); document.getElementById('clock-app-time').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`; }, 1000);
             }
             else if (app === 'settings') {
                 title.innerText = "Настройки";
-                content.style.padding = '20px';
                 content.innerHTML = `
                     <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-                            <span>Wi-Fi</span> <span style="color:#0a84ff;">Домашняя сеть ></span>
-                        </div>
-                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-                            <span>Bluetooth</span> <span style="color:#0a84ff;">Вкл ></span>
-                        </div>
-                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-                            <span>Основные</span> <span style="color:#888;">></span>
-                        </div>
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Wi-Fi</span> <span style="color:#0a84ff;">Домашняя сеть ></span></div>
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Bluetooth</span> <span style="color:#0a84ff;">Вкл ></span></div>
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;"><span>Основные</span> <span style="color:#888;">></span></div>
                     </div>
                 `;
             }
+            // Установленные игры
+            else if (app === 'flappy') { playFlappy(); }
+            else if (app === 'ttt') { playTTT(); }
+            else if (app === 'snake') { playSnake(); }
             else {
                 title.innerText = "Приложение";
-                content.style.padding = '20px';
                 content.innerHTML = `<div style="text-align:center; margin-top:50px; color:#888;">🚧 В разработке</div>`;
             }
         }
 
         function closeApp() {
             document.getElementById('app-screen').classList.remove('active');
+            if(gameInterval) clearInterval(gameInterval);
         }
 
         // --- ЛОГИКА КАЛЬКУЛЯТОРА ---
@@ -388,29 +502,17 @@
                     if (result === undefined || isNaN(result)) throw "Error";
                     display.innerText = result;
                     calcValue = result.toString();
-                } catch (e) {
-                    display.innerText = "Ошибка";
-                    calcValue = '';
-                }
+                } catch (e) { display.innerText = "Ошибка"; calcValue = ''; }
             } else if (val === 'AC') {
-                calcValue = '';
-                display.innerText = '0';
+                calcValue = ''; display.innerText = '0';
             } else if (val === '+/-') {
-                if (calcValue) {
-                    calcValue = (parseFloat(calcValue) * -1).toString();
-                    display.innerText = calcValue;
-                }
+                if (calcValue) { calcValue = (parseFloat(calcValue) * -1).toString(); display.innerText = calcValue; }
             } else {
                 calcValue += val;
-                // Заменяем операторы для красивого отображения
-                let dispVal = calcValue.replace(/\*/g, '×').replace(/\//g, '÷');
-                display.innerText = dispVal;
+                display.innerText = calcValue.replace(/\*/g, '×').replace(/\//g, '÷');
             }
         }
-        function calcClear() {
-            calcValue = '';
-            document.getElementById('calc-display').innerText = '0';
-        }
+        function calcClear() { calcValue = ''; document.getElementById('calc-display').innerText = '0'; }
 
         // --- ЛОГИКА ЗАМЕТОК ---
         function renderNotes(container) {
@@ -420,16 +522,9 @@
                 <div class="notes-list" id="notes-list"></div>
             `;
             const list = document.getElementById('notes-list');
-            if (notes.length === 0) {
-                list.innerHTML = `<div style="text-align: center; color: #888; margin-top: 20px;">Заметок нет</div>`;
-            }
+            if (notes.length === 0) list.innerHTML = `<div style="text-align: center; color: #888; margin-top: 20px;">Заметок нет</div>`;
             notes.forEach((note, index) => {
-                list.innerHTML += `
-                    <div class="note-item">
-                        <h4>Заметка ${notes.length - index}</h4>
-                        <p>${note}</p>
-                    </div>
-                `;
+                list.innerHTML += `<div class="note-item"><h4>Заметка ${notes.length - index}</h4><p>${note}</p></div>`;
             });
         }
 
@@ -442,35 +537,183 @@
             }
         }
 
-        // --- ИНФИНИТИ СВАЙП (ИМИТАЦИЯ ЖЕСТОВ) ---
-        // Добавим поддержку свайпа мышкой для ПК, чтобы было удобно тестировать
-        let isMouseDown = false;
-        let lastMouseX = 0, lastMouseY = 0;
+        // --- ИГРЫ ---
+        let gameInterval;
         
-        document.addEventListener('mousedown', (e) => {
-            isMouseDown = true;
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-        });
+        // Flappy Bird
+        function playFlappy() {
+            const title = document.getElementById('app-title');
+            const content = document.getElementById('app-content');
+            title.innerText = "Flappy Bird";
+            content.style.padding = '0';
+            content.innerHTML = `
+                <div style="flex: 1; position: relative; display: flex; justify-content: center; align-items: center; background: #000;">
+                    <canvas id="game-canvas" width="320" height="480"></canvas>
+                    <div class="game-overlay" id="gameOverlay">
+                        <h2 style="color: #fff; margin-bottom: 20px;">Игра окончена</h2>
+                        <p style="color: #fff; margin-bottom: 20px;">Счет: <span id="finalScore" style="color: #ffdf6b; font-weight: bold; font-size: 24px;">0</span></p>
+                        <button class="store-btn" style="padding: 12px 24px; font-size: 16px;" onclick="resetFlappy()">Играть снова</button>
+                        <button class="store-btn" style="padding: 12px 24px; font-size: 16px; background: #333; margin-top: 10px;" onclick="closeApp()">Выход</button>
+                    </div>
+                </div>
+            `;
+            resetFlappy();
+            document.getElementById('game-canvas').addEventListener('touchstart', (e) => { if(!isGameOver) velocity = -7; });
+            document.getElementById('game-canvas').addEventListener('mousedown', (e) => { if(!isGameOver) velocity = -7; });
+        }
 
-        document.addEventListener('mouseup', (e) => {
-            if(!isMouseDown) return;
-            isMouseDown = false;
-            let diffX = e.clientX - lastMouseX;
-            let diffY = e.clientY - lastMouseY;
-            
-            // Если свайп от верхнего края
-            if (lastMouseY < 50) {
-                if (diffY > 50) {
-                    if (lastMouseX > window.innerWidth / 2) openControlCenter();
-                    else openNotif();
+        let birdY, velocity, pipes, score, isGameOver;
+        function resetFlappy() {
+            const canvas = document.getElementById('game-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            birdY = 240; velocity = 0; pipes = []; score = 0; isGameOver = false;
+            document.getElementById('gameOverlay').classList.remove('active');
+            if(gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(() => {
+                if(isGameOver) return;
+                velocity += 0.5; birdY += velocity;
+                if(birdY > 460 || birdY < 0) { isGameOver = true; document.getElementById('finalScore').innerText = score; document.getElementById('gameOverlay').classList.add('active'); }
+                if(pipes.length === 0 || pipes[pipes.length-1].x < 200) {
+                    let gap = 120, topPipeHeight = Math.random() * (canvas.height - gap - 100) + 50;
+                    pipes.push({x: canvas.width, top: topPipeHeight, bottom: canvas.height - topPipeHeight - gap, passed: false});
+                }
+                pipes.forEach(p => {
+                    p.x -= 2;
+                    if(p.x < 40 && p.x > 10 && (birdY < p.top || birdY > canvas.height - p.bottom)) { isGameOver = true; document.getElementById('finalScore').innerText = score; document.getElementById('gameOverlay').classList.add('active'); }
+                    if(p.x < 40 && p.x > 10 && !p.passed) { p.passed = true; score++; }
+                });
+                pipes = pipes.filter(p => p.x > -50);
+                
+                ctx.fillStyle = '#70c5ce'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ffdf6b'; ctx.fillRect(50, birdY, 24, 18);
+                ctx.fillStyle = '#34c759';
+                pipes.forEach(p => { ctx.fillRect(p.x, 0, 40, p.top); ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom); });
+                ctx.fillStyle = '#fff'; ctx.font = '24px Arial'; ctx.fillText('Счёт: ' + score, 10, 30);
+            }, 1000/60);
+        }
+
+        // Крестики-нолики
+        let tttBoard = [], tttPlayer = 'X', tttActive = false;
+        function playTTT() {
+            const title = document.getElementById('app-title');
+            const content = document.getElementById('app-content');
+            title.innerText = "Крестики-нолики";
+            content.style.padding = '20px';
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: #fff; margin-bottom: 10px;">Твой ход: <span id="ttt-turn">X</span></h3>
+                    <div class="ttt-grid" id="ttt-grid"></div>
+                    <button class="store-btn" style="margin-top: 20px; padding: 10px 20px;" onclick="playTTT()">Начать заново</button>
+                </div>
+            `;
+            tttBoard = ['', '', '', '', '', '', '', '', ''];
+            tttPlayer = 'X'; tttActive = true;
+            renderTTT();
+        }
+
+        function renderTTT() {
+            const grid = document.getElementById('ttt-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            tttBoard.forEach((cell, i) => {
+                let div = document.createElement('div');
+                div.className = 'ttt-cell';
+                div.innerText = cell;
+                div.onclick = () => {
+                    if(cell === '' && tttActive) {
+                        tttBoard[i] = tttPlayer;
+                        tttPlayer = tttPlayer === 'X' ? 'O' : 'X';
+                        document.getElementById('ttt-turn').innerText = tttPlayer;
+                        renderTTT();
+                        checkTTT();
+                    }
+                };
+                grid.appendChild(div);
+            });
+        }
+
+        function checkTTT() {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for(let w of wins) {
+                if(tttBoard[w[0]] && tttBoard[w[0]] === tttBoard[w[1]] && tttBoard[w[0]] === tttBoard[w[2]]) {
+                    alert(`Победил ${tttBoard[w[0]]}!`);
+                    tttActive = false;
+                    return;
                 }
             }
-            // Если свайп по пустому экрану вверх (разблокировка)
-            if (lastMouseY > window.innerHeight - 100 && diffY < -50) {
-                if (lockScreen.style.transform !== 'translateY(-100%)') unlock();
+            if(!tttBoard.includes('')) { alert("Ничья!"); tttActive = false; }
+        }
+
+        // Змейка
+        let snake, snakeDir, food, snakeTimer;
+        function playSnake() {
+            const title = document.getElementById('app-title');
+            const content = document.getElementById('app-content');
+            title.innerText = "Змейка";
+            content.style.padding = '20px';
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3 style="color: #fff; margin-bottom: 10px;">Счёт: <span id="snake-score">0</span></h3>
+                    <div class="snake-grid" id="snake-grid"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; width: 200px; margin-left: auto; margin-right: auto;">
+                        <div></div><button class="store-btn" onclick="changeSnakeDir(0, -1)">⬆️</button><div></div>
+                        <button class="store-btn" onclick="changeSnakeDir(-1, 0)">⬅️</button>
+                        <div></div>
+                        <button class="store-btn" onclick="changeSnakeDir(1, 0)">➡️</button>
+                        <div></div><button class="store-btn" onclick="changeSnakeDir(0, 1)">⬇️</button><div></div>
+                    </div>
+                    <button class="store-btn" style="margin-top: 20px; padding: 10px 20px;" onclick="startSnake()">Начать заново</button>
+                </div>
+            `;
+            startSnake();
+        }
+
+        function startSnake() {
+            if(snakeTimer) clearInterval(snakeTimer);
+            snake = [{x: 7, y: 7}];
+            snakeDir = {x: 0, y: -1};
+            food = {x: Math.floor(Math.random()*15), y: Math.floor(Math.random()*15)};
+            let score = 0;
+            document.getElementById('snake-score').innerText = score;
+            
+            snakeTimer = setInterval(() => {
+                const head = {x: snake[0].x + snakeDir.x, y: snake[0].y + snakeDir.y};
+                if(head.x < 0 || head.x >= 15 || head.y < 0 || head.y >= 15 || snake.some(s => s.x === head.x && s.y === head.y)) {
+                    clearInterval(snakeTimer);
+                    alert("Игра окончена! Счёт: " + score);
+                    return;
+                }
+                snake.unshift(head);
+                if(head.x === food.x && head.y === food.y) {
+                    score++; document.getElementById('snake-score').innerText = score;
+                    food = {x: Math.floor(Math.random()*15), y: Math.floor(Math.random()*15)};
+                } else {
+                    snake.pop();
+                }
+                renderSnake();
+            }, 200);
+        }
+
+        function renderSnake() {
+            const grid = document.getElementById('snake-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            for(let y=0; y<15; y++) {
+                for(let x=0; x<15; x++) {
+                    let div = document.createElement('div');
+                    div.className = 'snake-cell';
+                    if(snake.some(s => s.x === x && s.y === y)) div.classList.add('snake');
+                    if(food.x === x && food.y === y) div.classList.add('food');
+                    grid.appendChild(div);
+                }
             }
-        });
+        }
+
+        function changeSnakeDir(x, y) {
+            if(snakeDir.x === -x && snakeDir.y === -y) return;
+            snakeDir = {x, y};
+        }
     </script>
 </body>
 </html>
