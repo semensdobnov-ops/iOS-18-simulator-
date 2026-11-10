@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iOS 18 Simulator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        body { background: #000; height: 100vh; height: 100dvh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+
+        .device {
+            width: 100%; height: 100%; max-width: 430px; max-height: 932px;
+            background: url('https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1000&auto=format&fit=crop') center/cover;
+            position: relative; overflow: hidden; border-radius: 45px; box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            transition: background 0.5s ease;
+        }
+
+        /* Dynamic Island */
+        .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 1000; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
+        .dynamic-island.expanded { width: 90%; height: 80px; border-radius: 30px; padding: 15px; justify-content: space-between;}
+        .island-content { display: none; width: 100%; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600;}
+        .dynamic-island.expanded .island-content { display: flex; }
+
+        /* Lock Screen */
+        #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s; touch-action: none; }
+        #lock-screen.unlocked { transform: translateY(-100%); opacity: 0; }
+        .time-lock { text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); pointer-events: none;}
+        .time-lock h1 { font-size: 96px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin-left: -5px;}
+        .time-lock p { font-size: 22px; font-weight: 500; margin-top: 10px;}
+        .widgets-lock { width: 100%; display: flex; gap: 12px; justify-content: center; margin-top: 20px; pointer-events: none;}
+        .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
+        .widget h4 { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px;}
+        .widget p { font-size: 15px; font-weight: 600;}
+        .swipe-up { color: white; font-size: 15px; font-weight: 500; opacity: 0.8; margin-bottom: 20px; animation: pulse 2s infinite; pointer-events: none;}
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; transform: translateY(-5px); } 100% { opacity: 0.4; transform: translateY(0); } }
+
+        /* Home Screen */
+        #home-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 70px 20px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); opacity: 0; pointer-events: none; }
+        #home-screen.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; row-gap: 25px; }
+        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.1s; }
+        .app-icon:active { transform: scale(0.85); opacity: 0.8; }
+        .icon-box { width: 64px; height: 64px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); background: #fff; }
+        .app-icon span { color: white; font-size: 12px; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+        
+        .ic-msg { background: linear-gradient(180deg, #5bf075 0%, #1cb332 100%); }
+        .ic-cam { background: linear-gradient(180deg, #e5e5ea 0%, #a2a2a6 100%); }
+        .ic-photos { background: linear-gradient(180deg, #ffea61 0%, #ff9500 50%, #ff2d55 100%); }
+        .ic-settings { background: linear-gradient(180deg, #b0b0b5 0%, #8e8e93 100%); }
+        .ic-calc { background: linear-gradient(180deg, #333 0%, #000 100%); color: white;}
+        .ic-weather { background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); }
+        .ic-notes { background: linear-gradient(180deg, #f5f5dc 0%, #d4af37 100%); color: #333;}
+        .ic-clock { background: linear-gradient(180deg, #fff 0%, #000 100%); }
+
+        .dock { position: absolute; bottom: 25px; left: 15px; right: 15px; padding: 12px 15px; border-radius: 35px; display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .dock .icon-box { width: 60px; height: 60px; border-radius: 15px; font-size: 30px; box-shadow: none; }
+
+        /* Apps Screens (Universal) */
+        .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; border-radius: 45px; overflow: hidden;}
+        .app-screen.active { transform: translateY(0); }
+        .app-header { padding: 60px 20px 15px; display: flex; align-items: center; gap: 10px; background: #1c1c1e; color: #fff; position: sticky; top: 0; z-index: 10; }
+        .back-btn { font-size: 20px; color: #0a84ff; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 5px;}
+        .app-header h2 { font-size: 18px; font-weight: 600; margin-left: auto; margin-right: auto; transform: translateX(-20px);}
+        .app-content { flex: 1; overflow-y: auto; padding: 20px; background: #000; color: #fff; }
+
+        /* Control Center */
+        #control-center { position: absolute; top: -100%; right: 0; width: 100%; height: 100%; z-index: 900; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);}
+        #control-center.active { top: 0; }
+        .cc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 350px;}
+        .cc-card { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 15px; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; font-weight: 600;}
+        .cc-btn { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; transition: 0.2s;}
+        .cc-btn.active { background: #fff; color: #000; }
+        .cc-slider { width: 100%; height: 150px; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column-reverse;}
+        .cc-slider-fill { width: 100%; background: #fff; transition: height 0.1s;}
+        
+        /* Notifications */
+        #notifications { position: absolute; top: -100%; left: 0; width: 100%; height: 100%; z-index: 800; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 60px 20px; display: flex; flex-direction: column; gap: 15px;}
+        #notifications.active { top: 0; }
+        .notif-card { background: #1c1c1e; border-radius: 15px; padding: 15px; color: white; display: flex; gap: 10px; align-items: center;}
+        .notif-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 20px;}
+        .notif-text h4 { font-size: 14px; margin-bottom: 3px;}
+        .notif-text p { font-size: 12px; color: #888;}
+
+        /* Apps Content */
+        .calc-display { width: 100%; height: 150px; display: flex; justify-content: flex-end; align-items: flex-end; padding: 20px; font-size: 60px; color: white; font-weight: 300; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px; }
+        .calc-btn { height: 70px; border-radius: 35px; border: none; font-size: 24px; font-weight: 600; cursor: pointer; background: #333; color: white;}
+        .calc-btn.op { background: #ff9500; }
+        .calc-btn.clear { background: #a5a5a5; color: black;}
+        .calc-btn.zero { grid-column: span 2; text-align: left; padding-left: 30px; }
+        
+        .notes-list { display: flex; flex-direction: column; gap: 10px; }
+        .note-item { background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .note-item h4 { font-size: 16px; color: #fff; }
+        .note-item p { font-size: 12px; color: #888; }
+        .note-input { width: 100%; padding: 15px; border-radius: 10px; border: none; background: #1c1c1e; color: white; margin-bottom: 10px; font-size: 16px;}
+        .add-note-btn { width: 100%; padding: 15px; background: #0a84ff; color: white; border: none; border-radius: 10px; font-weight: bold; margin-bottom: 20px;}
+
+        .weather-ui { display: flex; flex-direction: column; align-items: center; color: white; padding-top: 50px; }
+        .weather-ui h1 { font-size: 80px; font-weight: 200; }
+        .weather-ui h2 { font-size: 24px; font-weight: 500; margin-bottom: 20px;}
+
+    </style>
+</head>
+<body>
+
+    <div class="device" id="device">
+        
+        <div class="dynamic-island" id="dynamic-island" onclick="toggleIsland()">
+            <div style="font-size: 10px; opacity: 0.5;">⬛</div>
+            <div class="island-content">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="color:#0a84ff; font-size:20px;">🎵</span>
+                    <div>
+                        <div style="font-size:12px; color:#888; margin-bottom:2px;">Nexi</div>
+                        <div>aeth is goat</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:15px; font-size:20px;">
+                    <span>⏮</span><span>⏸</span><span>⏭</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lock Screen -->
+        <div id="lock-screen">
+            <div class="time-lock">
+                <h1 id="time-display">09:41</h1>
+                <p>Четверг, 26 сентября</p>
+            </div>
+            <div class="widgets-lock">
+                <div class="widget"><h4>Погода</h4><p>+21° Облачно</p></div>
+                <div class="widget"><h4>Календарь</h4><p>Встреча в 15:00</p></div>
+            </div>
+            <div class="swipe-up">Свайп вверх ⬆️</div>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home-screen">
+            <div class="app-grid">
+                <div class="app-icon" onclick="openApp('notes')"><div class="icon-box ic-notes">📝</div><span>Заметки</span></div>
+                <div class="app-icon" onclick="openApp('calc')"><div class="icon-box ic-calc">🧮</div><span>Калькулятор</span></div>
+                <div class="app-icon" onclick="openApp('weather')"><div class="icon-box ic-weather">☀️</div><span>Погода</span></div>
+                <div class="app-icon" onclick="openApp('settings')"><div class="icon-box ic-settings">⚙️</div><span>Настройки</span></div>
+                <div class="app-icon" onclick="openApp('clock')"><div class="icon-box ic-clock">🕒</div><span>Часы</span></div>
+                <div class="app-icon" onclick="openApp('photos')"><div class="icon-box ic-photos">🌸</div><span>Фото</span></div>
+            </div>
+            <div class="dock">
+                <div class="icon-box" style="background:#34c759" onclick="openNotif()">📞</div>
+                <div class="icon-box" style="background:#007aff" onclick="openApp('safari')">🌐</div>
+                <div class="icon-box ic-msg" onclick="openApp('msg')">💬</div>
+                <div class="icon-box ic-cam" onclick="openApp('cam')">📷</div>
+            </div>
+        </div>
+
+        <!-- Control Center -->
+        <div id="control-center">
+            <div class="cc-grid">
+                <div class="cc-slider"><div class="cc-slider-fill" style="height: 60%;"></div></div>
+                <div class="cc-slider"><div class="cc-slider-fill" style="height: 30%;"></div></div>
+                <div class="cc-card">
+                    <div class="cc-btn active" onclick="this.classList.toggle('active')">✈️</div>
+                    <div class="cc-btn active" onclick="this.classList.toggle('active')">📶</div>
+                </div>
+                <div class="cc-card">
+                    <div class="cc-btn" onclick="this.classList.toggle('active')">🔵</div>
+                    <div class="cc-btn" onclick="this.classList.toggle('active')">🔦</div>
+                </div>
+            </div>
+            <div style="position:absolute; bottom: 40px; color: white; text-align: center; opacity: 0.6;">Свайп вверх, чтобы закрыть</div>
+        </div>
+
+        <!-- Notifications -->
+        <div id="notifications">
+            <div style="display:flex; justify-content:space-between; color:white; margin-bottom:20px;">
+                <h2 style="font-size: 24px; font-weight: 700;">Уведомления</h2>
+                <div style="cursor:pointer; font-size: 24px;" onclick="closeNotif()">✕</div>
+            </div>
+            <div class="notif-card">
+                <div class="notif-icon" style="background: #34c759;">💬</div>
+                <div class="notif-text"><h4>Сообщения</h4><p>Привет! Как игра?</p></div>
+            </div>
+            <div class="notif-card">
+                <div class="notif-icon" style="background: #ff9500;">📷</div>
+                <div class="notif-text"><h4>Фото</h4><p>Новое воспоминание за сентябрь</p></div>
+            </div>
+        </div>
+
+        <!-- App Screens -->
+        <div id="app-screen" class="app-screen">
+            <div class="app-header">
+                <div class="back-btn" onclick="closeApp()">‹ Назад</div>
+                <h2 id="app-title">Приложение</h2>
+            </div>
+            <div class="app-content" id="app-content"></div>
+        </div>
+
+    </div>
+<script>
+        // --- ЧАСЫ ---
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const mins = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('time-display').innerText = `${hours}:${mins}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // --- РАЗБЛОКИРОВКА ---
+        let startY = 0;
+        const lockScreen = document.getElementById('lock-screen');
+        const homeScreen = document.getElementById('home-screen');
+        
+        lockScreen.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, {passive: true});
+        lockScreen.addEventListener('touchend', (e) => {
+            let endY = e.changedTouches[0].clientY;
+            if (startY - endY > 50) unlock();
+        }, {passive: true});
+        
+        // Для ПК
+        let mouseDown = false;
+        lockScreen.addEventListener('mousedown', (e) => { startY = e.clientY; mouseDown = true; });
+        lockScreen.addEventListener('mouseup', (e) => {
+            if(mouseDown && startY - e.clientY > 50) unlock();
+            mouseDown = false;
+        });
+
+        function unlock() {
+            lockScreen.classList.add('unlocked');
+            setTimeout(() => { homeScreen.classList.add('active'); }, 200);
+        }
+
+        // --- DYNAMIC ISLAND ---
+        function toggleIsland() {
+            document.getElementById('dynamic-island').classList.toggle('expanded');
+        }
+
+        // --- CONTROL CENTER & NOTIFICATIONS ---
+        // Свайп от верхнего правого угла
+        let swipeStartX = 0, swipeStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            swipeStartX = e.touches[0].clientX;
+            swipeStartY = e.touches[0].clientY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', (e) => {
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+            
+            // Свайп вниз от верхнего края (уведомления)
+            if (swipeStartY < 50 && endY - swipeStartY > 100 && swipeStartX < 150) {
+                if(homeScreen.classList.contains('active')) openNotif();
+            }
+            // Свайп вниз от правого верхнего угла (Control Center)
+            if (swipeStartY < 50 && endY - swipeStartY > 100 && swipeStartX > window.innerWidth - 150) {
+                if(homeScreen.classList.contains('active')) openControlCenter();
+            }
+        }, {passive: true});
+
+        // Свайп вверх для закрытия панелей
+        document.getElementById('control-center').addEventListener('touchstart', (e) => { swipeStartY = e.touches[0].clientY; }, {passive: true});
+        document.getElementById('control-center').addEventListener('touchend', (e) => {
+            let endY = e.changedTouches[0].clientY;
+            if (swipeStartY - endY > 50) closeControlCenter();
+        }, {passive: true});
+        document.getElementById('notifications').addEventListener('touchstart', (e) => { swipeStartY = e.touches[0].clientY; }, {passive: true});
+        document.getElementById('notifications').addEventListener('touchend', (e) => {
+            let endY = e.changedTouches[0].clientY;
+            if (swipeStartY - endY > 50) closeNotif();
+        }, {passive: true});
+
+        function openControlCenter() { document.getElementById('control-center').classList.add('active'); }
+        function closeControlCenter() { document.getElementById('control-center').classList.remove('active'); }
+        function openNotif() { document.getElementById('notifications').classList.add('active'); }
+        function closeNotif() { document.getElementById('notifications').classList.remove('active'); }
+
+        // --- ПРИЛОЖЕНИЯ ---
+        let currentApp = '';
+        let calcValue = '';
+        let notes = JSON.parse(localStorage.getItem('ios_notes') || '[]');
+
+        function openApp(app) {
+            currentApp = app;
+            const screen = document.getElementById('app-screen');
+            const title = document.getElementById('app-title');
+            const content = document.getElementById('app-content');
+            
+            screen.classList.add('active');
+            content.innerHTML = '';
+
+            if (app === 'calc') {
+                title.innerText = "Калькулятор";
+                content.style.padding = '0';
+                content.innerHTML = `
+                    <div class="calc-display" id="calc-display">0</div>
+                    <div class="calc-grid">
+                        <button class="calc-btn clear" onclick="calcClear()">AC</button>
+                        <button class="calc-btn clear" onclick="calcInput('+/-')">+/-</button>
+                        <button class="calc-btn clear" onclick="calcInput('%')">%</button>
+                        <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+                        <button class="calc-btn" onclick="calcInput('7')">7</button>
+                        <button class="calc-btn" onclick="calcInput('8')">8</button>
+                        <button class="calc-btn" onclick="calcInput('9')">9</button>
+                        <button class="calc-btn op" onclick="calcInput('*')">×</button>
+                        <button class="calc-btn" onclick="calcInput('4')">4</button>
+                        <button class="calc-btn" onclick="calcInput('5')">5</button>
+                        <button class="calc-btn" onclick="calcInput('6')">6</button>
+                        <button class="calc-btn op" onclick="calcInput('-')">-</button>
+                        <button class="calc-btn" onclick="calcInput('1')">1</button>
+                        <button class="calc-btn" onclick="calcInput('2')">2</button>
+                        <button class="calc-btn" onclick="calcInput('3')">3</button>
+                        <button class="calc-btn op" onclick="calcInput('+')">+</button>
+                        <button class="calc-btn zero" onclick="calcInput('0')">0</button>
+                        <button class="calc-btn" onclick="calcInput('.')">,</button>
+                        <button class="calc-btn op" onclick="calcInput('=')">=</button>
+                    </div>
+                `;
+            } 
+            else if (app === 'notes') {
+                title.innerText = "Заметки";
+                content.style.padding = '20px';
+                renderNotes(content);
+            }
+            else if (app === 'weather') {
+                title.innerText = "Погода";
+                content.style.padding = '0';
+                content.innerHTML = `
+                    <div class="weather-ui" style="background: linear-gradient(180deg, #00c6ff, #0072ff); height: 100%;">
+                        <h2>Москва</h2>
+                        <h1>+21°</h1>
+                        <p>Облачно</p>
+                        <p style="margin-top: 20px; font-size: 14px;">Ветер: 3 м/с • Влажность: 45%</p>
+                    </div>
+                `;
+            }
+            else if (app === 'clock') {
+                title.innerText = "Часы";
+                content.style.padding = '20px';
+                content.innerHTML = `
+                    <div style="text-align: center; margin-top: 50px;">
+                        <div style="font-size: 80px; font-weight: 200; color: #fff;" id="clock-app-time">00:00</div>
+                        <div style="color: #888; margin-top: 10px;">Сейчас</div>
+                    </div>
+                `;
+                setInterval(() => {
+                    const now = new Date();
+                    document.getElementById('clock-app-time').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+                }, 1000);
+            }
+            else if (app === 'settings') {
+                title.innerText = "Настройки";
+                content.style.padding = '20px';
+                content.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
+                            <span>Wi-Fi</span> <span style="color:#0a84ff;">Домашняя сеть ></span>
+                        </div>
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
+                            <span>Bluetooth</span> <span style="color:#0a84ff;">Вкл ></span>
+                        </div>
+                        <div style="background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
+                            <span>Основные</span> <span style="color:#888;">></span>
+                        </div>
+                    </div>
+                `;
+            }
+            else {
+                title.innerText = "Приложение";
+                content.style.padding = '20px';
+                content.innerHTML = `<div style="text-align:center; margin-top:50px; color:#888;">🚧 В разработке</div>`;
+            }
+        }
+
+        function closeApp() {
+            document.getElementById('app-screen').classList.remove('active');
+        }
+
+        // --- ЛОГИКА КАЛЬКУЛЯТОРА ---
+        function calcInput(val) {
+            const display = document.getElementById('calc-display');
+            if (val === '=') {
+                try {
+                    let result = eval(calcValue);
+                    if (result === undefined || isNaN(result)) throw "Error";
+                    display.innerText = result;
+                    calcValue = result.toString();
+                } catch (e) {
+                    display.innerText = "Ошибка";
+                    calcValue = '';
+                }
+            } else if (val === 'AC') {
+                calcValue = '';
+                display.innerText = '0';
+            } else if (val === '+/-') {
+                if (calcValue) {
+                    calcValue = (parseFloat(calcValue) * -1).toString();
+                    display.innerText = calcValue;
+                }
+            } else {
+                calcValue += val;
+                // Заменяем операторы для красивого отображения
+                let dispVal = calcValue.replace(/\*/g, '×').replace(/\//g, '÷');
+                display.innerText = dispVal;
+            }
+        }
+        function calcClear() {
+            calcValue = '';
+            document.getElementById('calc-display').innerText = '0';
+        }
+
+        // --- ЛОГИКА ЗАМЕТОК ---
+        function renderNotes(container) {
+            container.innerHTML = `
+                <input type="text" class="note-input" id="new-note-text" placeholder="Текст заметки...">
+                <button class="add-note-btn" onclick="addNote()">Добавить заметку</button>
+                <div class="notes-list" id="notes-list"></div>
+            `;
+            const list = document.getElementById('notes-list');
+            if (notes.length === 0) {
+                list.innerHTML = `<div style="text-align: center; color: #888; margin-top: 20px;">Заметок нет</div>`;
+            }
+            notes.forEach((note, index) => {
+                list.innerHTML += `
+                    <div class="note-item">
+                        <h4>Заметка ${notes.length - index}</h4>
+                        <p>${note}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function addNote() {
+            const input = document.getElementById('new-note-text');
+            if (input.value.trim() !== '') {
+                notes.unshift(input.value.trim());
+                localStorage.setItem('ios_notes', JSON.stringify(notes));
+                renderNotes(document.getElementById('app-content'));
+            }
+        }
+
+        // --- ИНФИНИТИ СВАЙП (ИМИТАЦИЯ ЖЕСТОВ) ---
+        // Добавим поддержку свайпа мышкой для ПК, чтобы было удобно тестировать
+        let isMouseDown = false;
+        let lastMouseX = 0, lastMouseY = 0;
+        
+        document.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if(!isMouseDown) return;
+            isMouseDown = false;
+            let diffX = e.clientX - lastMouseX;
+            let diffY = e.clientY - lastMouseY;
+            
+            // Если свайп от верхнего края
+            if (lastMouseY < 50) {
+                if (diffY > 50) {
+                    if (lastMouseX > window.innerWidth / 2) openControlCenter();
+                    else openNotif();
+                }
+            }
+            // Если свайп по пустому экрану вверх (разблокировка)
+            if (lastMouseY > window.innerHeight - 100 && diffY < -50) {
+                if (lockScreen.style.transform !== 'translateY(-100%)') unlock();
+            }
+        });
+    </script>
+</body>
+</html>
