@@ -12,6 +12,7 @@
         
         .device { width: 100%; height: 100%; max-width: 430px; max-height: 932px; background: url('https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1000&auto=format&fit=crop') center/cover; position: relative; overflow: hidden; border-radius: 45px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transition: background 0.5s ease; }
 
+        /* Dynamic Island */
         .dynamic-island { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 2000; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; cursor: pointer; }
         .dynamic-island.expanded { width: 90%; height: 80px; border-radius: 30px; padding: 15px; justify-content: space-between;}
         .island-content { display: none; width: 100%; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600;}
@@ -21,9 +22,24 @@
         .island-playing { display: none; width: 100%; justify-content: space-between; align-items: center;}
         .dynamic-island.playing .island-playing { display: flex; }
 
-        #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.5s ease, opacity 0.5s; touch-action: none; }
+        /* Lock Screen */
+        #lock-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 80px 20px 30px; z-index: 10; transition: transform 0.5s ease, opacity 0.5s; }
         #lock-screen.unlocked { transform: translateY(-100%); opacity: 0; pointer-events: none; }
         
+        .time-lock { text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .time-lock h1 { font-size: 96px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin-left: -5px;}
+        .time-lock p { font-size: 22px; font-weight: 500; margin-top: 10px;}
+        .widgets-lock { width: 100%; display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+        .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
+        .widget h4 { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px;}
+        .widget p { font-size: 15px; font-weight: 600;}
+        
+        /* Кнопка разблокировки (вместо свайпа) */
+        .unlock-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: pulse 2s infinite; }
+        .unlock-btn:active { background: rgba(255,255,255,0.4); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Password Screen */
         #passcode-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1500; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; }
         #passcode-screen.active { display: flex; }
         .passcode-dots { display: flex; gap: 15px; margin-bottom: 30px; }
@@ -34,15 +50,7 @@
         .passcode-btn:active { background: rgba(255,255,255,0.3); }
         .forgot-btn { margin-top: 30px; color: #0a84ff; font-size: 16px; cursor: pointer; }
 
-        .time-lock { text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); pointer-events: none;}
-        .time-lock h1 { font-size: 96px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin-left: -5px;}
-        .time-lock p { font-size: 22px; font-weight: 500; margin-top: 10px;}
-        .widgets-lock { width: 100%; display: flex; gap: 12px; justify-content: center; margin-top: 20px; pointer-events: none;}
-        .widget { padding: 15px; border-radius: 20px; color: white; flex: 1; text-align: left; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1);}
-        .widget h4 { font-size: 11px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px;}
-        .widget p { font-size: 15px; font-weight: 600;}
-        .swipe-up { color: white; font-size: 15px; font-weight: 500; opacity: 0.8; margin-bottom: 20px; pointer-events: none; cursor: pointer;}
-
+        /* Home Screen */
         #home-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 70px 20px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.5s ease; opacity: 0; pointer-events: none; }
         #home-screen.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; row-gap: 25px; }
@@ -67,6 +75,7 @@
         .dock { position: absolute; bottom: 25px; left: 15px; right: 15px; padding: 12px 15px; border-radius: 35px; display: flex; justify-content: space-around; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.1); }
         .dock .icon-box { width: 60px; height: 60px; border-radius: 15px; font-size: 30px; box-shadow: none; }
 
+        /* App Screens */
         .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 100; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; border-radius: 45px; overflow: hidden;}
         .app-screen.active { transform: translateY(0); }
         .app-header { padding: 60px 20px 15px; display: flex; align-items: center; gap: 10px; background: #1c1c1e; color: #fff; position: sticky; top: 0; z-index: 10; }
@@ -74,6 +83,7 @@
         .app-header h2 { font-size: 18px; font-weight: 600; margin-left: auto; margin-right: auto; transform: translateX(-20px);}
         .app-content { flex: 1; overflow-y: auto; padding: 20px; background: #000; color: #fff; }
 
+        /* Control Center */
         #control-center { position: absolute; top: -100%; right: 0; width: 100%; height: 100%; z-index: 900; transition: top 0.3s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: rgba(0,0,0,0.8);}
         #control-center.active { top: 0; }
         .cc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 350px;}
@@ -83,6 +93,7 @@
         .cc-slider { width: 100%; height: 120px; background: rgba(255,255,255,0.2); border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column-reverse; margin-bottom: 10px;}
         .cc-slider-fill { width: 100%; background: #fff; }
 
+        /* Settings & Apps */
         .settings-item { background: #1c1c1e; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 15px; cursor: pointer;}
         .settings-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-right: 10px; font-size: 18px;}
         
@@ -159,7 +170,8 @@
                 <div class="widget"><h4>Погода</h4><p>+21° Облачно</p></div>
                 <div class="widget"><h4>Календарь</h4><p>Встреча в 15:00</p></div>
             </div>
-            <div class="swipe-up" onclick="openPasscode()">Нажмите, чтобы ввести код ⬆️</div>
+            <!-- Кнопка вместо свайпа -->
+            <button class="unlock-btn" onclick="openPasscode()">Разблокировать</button>
         </div>
 
         <div id="passcode-screen">
@@ -218,7 +230,8 @@
         // --- SYSTEM ---
         function updateTime() {
             const now = new Date();
-            document.getElementById('time-display').innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            const display = document.getElementById('time-display');
+            if(display) display.innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         }
         setInterval(updateTime, 1000); updateTime();
 
@@ -289,7 +302,7 @@
 
         function forgotPasscode() {
             if(savedPasscode) {
-                alert(`Ваш код-пароль: ${savedPasscode}\n\n(В реальном iPhone его нельзя посмотреть, но это симулятор 😉)`);
+                alert(`Ваш код-пароль: ${savedPasscode}`);
             } else {
                 alert("Пароль не задан.");
             }
@@ -520,12 +533,14 @@
         
         function switchClockTab(tab) {
             document.querySelectorAll('.clock-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event) event.target.classList.add('active');
             
             clearInterval(stopwatchInterval);
             clearInterval(timerInterval);
             
             const content = document.getElementById('clock-content');
+            if(!content) return;
+            
             if(tab === 'stopwatch') {
                 content.innerHTML = `
                     <div class="stopwatch-display" id="sw-display">00:00.00</div>
